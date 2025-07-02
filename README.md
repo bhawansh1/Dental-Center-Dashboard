@@ -1378,8 +1378,7 @@ Creates a new appointment/incident.
 ## 📞 Support
 
 For questions, issues, or support:
-- **Email**: 
-- **GitHub Issues**: 
+- **Email**: bhawanshsingh1@gmail.com
 
 ## 📄 License
 
