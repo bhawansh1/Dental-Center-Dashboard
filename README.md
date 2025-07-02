@@ -35,7 +35,7 @@ This is a full-featured dental center management system built with React that si
 
 ## 🚀 Live Demo
 
-- **Deployed Application**: [Your Netlify URL Here]
+- **Deployed Application**: [https://dental-center-dashboard-one.vercel.app/]
 - **GitHub Repository**: [Your GitHub Repository URL Here]
 
 ### Demo Credentials:
