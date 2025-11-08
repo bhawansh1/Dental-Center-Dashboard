@@ -32,7 +32,7 @@ const Sidebar = () => {
             <div className="p-6">
                 <div className="flex items-center space-x-2">
                     <Activity className="h-8 w-8 text-primary-600" />
-                    <h2 className="text-xl font-bold text-gray-800">DentalCare</h2>
+                    <h2 className="text-xl font-bold text-gray-800">MedicalCare</h2>
                 </div>
             </div>
             <nav className="mt-6">

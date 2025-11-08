@@ -34,14 +34,29 @@ const Incidents = () => {
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        if (editingIncident) {
-            updateIncident(editingIncident.id, formData);
-        } else {
-            addIncident(formData);
+        try {
+            const dataToSubmit = {
+                ...formData,
+                files: formData.files.map(file => ({
+                    name: file.name,
+                    size: file.size,
+                    type: file.type,
+                    url: file.url
+                }))
+            };
+
+            if (editingIncident) {
+                updateIncident(editingIncident.id, dataToSubmit);
+            } else {
+                addIncident(dataToSubmit);
+            }
+            setIsModalOpen(false);
+            setEditingIncident(null);
+            resetForm();
+        } catch (error) {
+            alert('Error saving appointment. Please try with smaller files.');
+            console.error('Submit error:', error);
         }
-        setIsModalOpen(false);
-        setEditingIncident(null);
-        resetForm();
     };
 
     const resetForm = () => {
@@ -84,7 +99,14 @@ const Incidents = () => {
 
     const handleFileUpload = (e) => {
         const files = Array.from(e.target.files);
+        const maxSize = 5 * 1024 * 1024;
+
         files.forEach(file => {
+            if (file.size > maxSize) {
+                alert(`File ${file.name} is too large. Maximum size is 5MB.`);
+                return;
+            }
+
             const reader = new FileReader();
             reader.onload = (event) => {
                 const newFile = {
@@ -97,6 +119,9 @@ const Incidents = () => {
                     ...prev,
                     files: [...prev.files, newFile]
                 }));
+            };
+            reader.onerror = () => {
+                alert(`Failed to read file ${file.name}`);
             };
             reader.readAsDataURL(file);
         });
@@ -130,7 +155,7 @@ const Incidents = () => {
     return (
         <div className="space-y-6">
             <div className="flex items-center justify-between">
-                <h1 className="text-2xl font-bold text-gray-900">Appointments</h1>
+                <h1 className="text-2xl font-bold text-gray-900">Medical Appointments</h1>
                 <button
                     onClick={() => {
                         setEditingIncident(null);
@@ -395,7 +420,7 @@ const Incidents = () => {
                     {/* File Upload */}
                     <div>
                         <label className="block text-sm font-medium text-gray-700 mb-1">
-                            Files (Images, Invoices, etc.)
+                            Medical Files (Reports, Images, etc.)
                         </label>
                         <div className="mt-1 flex justify-center px-6 pt-5 pb-6 border-2 border-gray-300 border-dashed rounded-md">
                             <div className="space-y-1 text-center">
@@ -415,7 +440,7 @@ const Incidents = () => {
                                     </label>
                                     <p className="pl-1">or drag and drop</p>
                                 </div>
-                                <p className="text-xs text-gray-500">PNG, JPG, PDF up to 10MB</p>
+                                <p className="text-xs text-gray-500">PNG, JPG, PDF up to 5MB</p>
                             </div>
                         </div>
                     </div>

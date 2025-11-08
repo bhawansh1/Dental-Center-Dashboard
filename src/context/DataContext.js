@@ -32,12 +32,12 @@ const initializeData = () => {
             {
                 id: "i1",
                 patientId: "p1",
-                title: "Toothache",
-                description: "Upper molar pain",
-                comments: "Sensitive to cold",
+                title: "General Checkup",
+                description: "Annual medical checkup",
+                comments: "All tests completed",
                 appointmentDate: "2025-01-15T10:00:00",
-                cost: 80,
-                treatment: "Root canal treatment",
+                cost: 100,
+                treatment: "General examination and blood work",
                 status: "Scheduled",
                 nextDate: "2025-01-22T10:00:00",
                 files: []
