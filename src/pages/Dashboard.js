@@ -5,7 +5,6 @@ import {
     Users,
     Calendar,
     DollarSign,
-    Activity,
     Clock,
     CheckCircle,
     AlertCircle
@@ -17,7 +16,7 @@ const Dashboard = () => {
 
     // Calculate KPIs
     const totalPatients = patients.length;
-    const totalIncidents = incidents.length;
+    //const totalIncidents = incidents.length;
     const completedTreatments = incidents.filter(i => i.status === 'Completed').length;
     const pendingTreatments = incidents.filter(i => i.status === 'Scheduled').length;
     const totalRevenue = incidents

@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useData } from '../context/DataContext';
-import { Plus, Edit, Trash2, Search, Eye } from 'lucide-react';
+import { Plus, Edit, Trash2, Search} from 'lucide-react';
 import Modal from '../components/Modal';
 
 const Patients = () => {

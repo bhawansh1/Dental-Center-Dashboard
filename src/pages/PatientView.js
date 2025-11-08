@@ -7,7 +7,6 @@ import {
     Clock,
     FileText,
     Download,
-    Eye,
     CheckCircle,
     AlertCircle,
     Plus
@@ -17,7 +16,7 @@ import Modal from '../components/Modal';
 const PatientView = () => {
     const { user } = useAuth();
     const { patients, incidents, addIncident } = useData();
-    const [selectedIncident, setSelectedIncident] = useState(null);
+    //const [selectedIncident, setSelectedIncident] = useState(null);
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [formData, setFormData] = useState({
         title: '',
