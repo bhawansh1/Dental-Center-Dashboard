@@ -9,13 +9,22 @@ import {
     Download,
     Eye,
     CheckCircle,
-    AlertCircle
+    AlertCircle,
+    Plus
 } from 'lucide-react';
+import Modal from '../components/Modal';
 
 const PatientView = () => {
     const { user } = useAuth();
-    const { patients, incidents } = useData();
+    const { patients, incidents, addIncident } = useData();
     const [selectedIncident, setSelectedIncident] = useState(null);
+    const [isModalOpen, setIsModalOpen] = useState(false);
+    const [formData, setFormData] = useState({
+        title: '',
+        description: '',
+        appointmentDate: '',
+        comments: ''
+    });
 
     const patient = patients.find(p => p.id === user.patientId);
     const patientIncidents = incidents.filter(i => i.patientId === user.patientId);
@@ -50,6 +59,36 @@ const PatientView = () => {
         document.body.removeChild(link);
     };
 
+    const handleSubmit = (e) => {
+        e.preventDefault();
+        const newAppointment = {
+            patientId: user.patientId,
+            title: formData.title,
+            description: formData.description,
+            appointmentDate: formData.appointmentDate,
+            comments: formData.comments,
+            status: 'Scheduled',
+            files: []
+        };
+        addIncident(newAppointment);
+        setIsModalOpen(false);
+        setFormData({
+            title: '',
+            description: '',
+            appointmentDate: '',
+            comments: ''
+        });
+    };
+
+    const resetForm = () => {
+        setFormData({
+            title: '',
+            description: '',
+            appointmentDate: '',
+            comments: ''
+        });
+    };
+
     if (!patient) {
         return (
             <div className="flex items-center justify-center min-h-[400px]">
@@ -66,6 +105,16 @@ const PatientView = () => {
         <div className="space-y-6">
             <div className="flex items-center justify-between">
                 <h1 className="text-2xl font-bold text-gray-900">My Profile</h1>
+                <button
+                    onClick={() => {
+                        resetForm();
+                        setIsModalOpen(true);
+                    }}
+                    className="bg-primary-600 hover:bg-primary-700 text-white px-4 py-2 rounded-lg flex items-center space-x-2 transition-colors"
+                >
+                    <Plus className="h-4 w-4" />
+                    <span>Book Appointment</span>
+                </button>
             </div>
 
             {/* Patient Information Card */}
@@ -251,6 +300,97 @@ const PatientView = () => {
                     <p className="text-gray-500">No treatment history available.</p>
                 )}
             </div>
+
+            {/* Book Appointment Modal */}
+            <Modal
+                isOpen={isModalOpen}
+                onClose={() => {
+                    setIsModalOpen(false);
+                    resetForm();
+                }}
+                title="Book New Appointment"
+            >
+                <form onSubmit={handleSubmit} className="space-y-4">
+                    <div>
+                        <label className="block text-sm font-medium text-gray-700 mb-1">
+                            Appointment Title
+                        </label>
+                        <input
+                            type="text"
+                            required
+                            value={formData.title}
+                            onChange={(e) => setFormData({ ...formData, title: e.target.value })}
+                            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-primary-500 focus:border-transparent"
+                            placeholder="e.g., Regular Checkup, Tooth Pain, etc."
+                        />
+                    </div>
+
+                    <div>
+                        <label className="block text-sm font-medium text-gray-700 mb-1">
+                            Preferred Date & Time
+                        </label>
+                        <input
+                            type="datetime-local"
+                            required
+                            value={formData.appointmentDate}
+                            onChange={(e) => setFormData({ ...formData, appointmentDate: e.target.value })}
+                            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-primary-500 focus:border-transparent"
+                        />
+                    </div>
+
+                    <div>
+                        <label className="block text-sm font-medium text-gray-700 mb-1">
+                            Description
+                        </label>
+                        <textarea
+                            rows="3"
+                            required
+                            value={formData.description}
+                            onChange={(e) => setFormData({ ...formData, description: e.target.value })}
+                            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-primary-500 focus:border-transparent"
+                            placeholder="Describe your symptoms or reason for visit..."
+                        />
+                    </div>
+
+                    <div>
+                        <label className="block text-sm font-medium text-gray-700 mb-1">
+                            Additional Comments
+                        </label>
+                        <textarea
+                            rows="2"
+                            value={formData.comments}
+                            onChange={(e) => setFormData({ ...formData, comments: e.target.value })}
+                            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-primary-500 focus:border-transparent"
+                            placeholder="Any additional information..."
+                        />
+                    </div>
+
+                    <div className="bg-blue-50 border border-blue-200 rounded-md p-3">
+                        <p className="text-sm text-blue-800">
+                            Your appointment request will be submitted for review. You will be notified once it is confirmed by our staff.
+                        </p>
+                    </div>
+
+                    <div className="flex justify-end space-x-3 pt-4">
+                        <button
+                            type="button"
+                            onClick={() => {
+                                setIsModalOpen(false);
+                                resetForm();
+                            }}
+                            className="px-4 py-2 text-gray-700 bg-gray-100 hover:bg-gray-200 rounded-md transition-colors"
+                        >
+                            Cancel
+                        </button>
+                        <button
+                            type="submit"
+                            className="px-4 py-2 bg-primary-600 hover:bg-primary-700 text-white rounded-md transition-colors"
+                        >
+                            Book Appointment
+                        </button>
+                    </div>
+                </form>
+            </Modal>
         </div>
     );
 };
